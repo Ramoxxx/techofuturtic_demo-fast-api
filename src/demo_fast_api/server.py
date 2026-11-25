@@ -1,27 +1,29 @@
 import math
 from typing import Annotated
 from fastapi import FastAPI, Query
+from fastapi.params import Body
 import uvicorn
 
-from demo_fast_api.dto.queries import EquationQuery
+from demo_fast_api.dto.request import EquationRequest, ContactRequest
 from demo_fast_api.dto.responses import EquationResponse
+from demo_fast_api.mailer import send_email
 
 
-app = FastAPI()
+app = FastAPI(root_path="/api")
 
-@app.get('/api/hello', response_model=str)
+@app.get('/hello', response_model=str)
 def say_hello(name: Annotated[str, Query()] = 'World'):
     return f"hello {name} !!"
 
-@app.get('/api/fibo', response_model=int)
+@app.get('/fibo', response_model=int)
 def fibo(n: Annotated[int, Query(ge=0)]):
     a, b = 0, 1
     for _ in range(n):
         a, b = b, a + b
     return f"fibonacci number at {n} is {a}"
 
-@app.get("/api/equation", response_model=EquationResponse)
-def equation(dto: Annotated[EquationQuery, Query()]):
+@app.get("/equation", response_model=EquationResponse)
+def equation(dto: Annotated[EquationRequest, Query()]):
 
     result = {}
     
@@ -36,6 +38,15 @@ def equation(dto: Annotated[EquationQuery, Query()]):
         result['sol2'] = None
 
     return result
+
+@app.post("/contact", response_model=str)
+async def contact(dto: Annotated[ContactRequest, Body()]):
+    name = dto.name
+    email = dto.email
+    content = dto.content
+    return f"mail sending disabled. {name}, {email}, {content}"
+    # return await send_email(email, f"{name} sent a message from fast api.", content)
+    
 
 
 def main():
