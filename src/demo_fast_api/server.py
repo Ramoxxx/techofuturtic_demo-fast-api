@@ -5,9 +5,10 @@ from fastapi.params import Body
 import uvicorn
 
 from demo_fast_api.dto.request import EquationRequest, ContactRequest
-from demo_fast_api.dto.responses import EquationResponse
+from demo_fast_api.dto.responses import EquationResponse, PokemonResponse
 from demo_fast_api.infrastructure.mailer import Mailer
 
+from demo_fast_api.services import PokemonService
 
 app = FastAPI(root_path="/api")
 
@@ -44,13 +45,24 @@ async def contact(dto: Annotated[ContactRequest, Body()], mailer: Annotated[Mail
     name = dto.name
     email = dto.email
     content = dto.content
-
-    try:
-        await mailer.send_email([email], f"{name} sent a message from fast api.", content)
-        return f"Mail sent to {email}"
-    except Exception as error:
-        return str(error)
+    return "mail sending disabled"
+    # try:
+    #     await mailer.send_email([email], f"{name} sent a message from fast api.", content)
+    #     return f"Mail sent to {email}"
+    # except Exception as error:
+    #     return str(error)
     
+@app.get("/pokemon/{pokemon_id}", response_model=PokemonResponse)
+def get_pokemon_full_info(pokemon_id: int, pokemon_service: Annotated[PokemonService, Depends(PokemonService)]):    
+    result = {}
+    result["id"] = pokemon_id
+    result["name"] = ""
+    result["height"] = 0.0
+    result["weight"] = 0.0
+    result["description"] = ""
+
+
+    return pokemon_service.get_pokemon(pokemon_id)
 
 
 def main():

@@ -9,6 +9,7 @@ dependencies = [
     "dotenv>=0.9.9",
     "fastapi-mail>=1.6.8",
     "fastapi[standard]>=0.165.0",
+    "httpx>=0.28.1",
     "psycopg2>=2.9.13",
     "python-dotenv>=1.2.4",
     "sqlalchemy>=2.1.9",
