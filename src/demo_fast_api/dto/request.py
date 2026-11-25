@@ -6,6 +6,6 @@ class EquationRequest(BaseModel):
     c: float = Field()
 
 class ContactRequest(BaseModel):
-    name: str = Field(max_length=50)
-    email: EmailStr = Field()
-    content: str = Field()
+    name: str = Field(max_length=50, default="Ramox")
+    email: EmailStr = Field(default="pochetraphael@gmail.com")
+    content: str = Field(default="Coucou")

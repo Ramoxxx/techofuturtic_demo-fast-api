@@ -1,12 +1,12 @@
 import math
 from typing import Annotated
-from fastapi import FastAPI, Query
+from fastapi import Depends, FastAPI, Query
 from fastapi.params import Body
 import uvicorn
 
 from demo_fast_api.dto.request import EquationRequest, ContactRequest
 from demo_fast_api.dto.responses import EquationResponse
-from demo_fast_api.mailer import send_email
+from demo_fast_api.infrastructure.mailer import Mailer
 
 
 app = FastAPI(root_path="/api")
@@ -40,12 +40,16 @@ def equation(dto: Annotated[EquationRequest, Query()]):
     return result
 
 @app.post("/contact", response_model=str)
-async def contact(dto: Annotated[ContactRequest, Body()]):
+async def contact(dto: Annotated[ContactRequest, Body()], mailer: Annotated[Mailer, Depends(Mailer)]):
     name = dto.name
     email = dto.email
     content = dto.content
-    return f"mail sending disabled. {name}, {email}, {content}"
-    # return await send_email(email, f"{name} sent a message from fast api.", content)
+
+    try:
+        await mailer.send_email([email], f"{name} sent a message from fast api.", content)
+        return f"Mail sent to {email}"
+    except Exception as error:
+        return str(error)
     
 
 
