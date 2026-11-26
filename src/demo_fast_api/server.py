@@ -14,50 +14,9 @@ from demo_fast_api.models.pokemon import Pokemon
 from demo_fast_api.services import OpenAIService, PokemonService
 
 app = FastAPI()
+# app.include_router(default_routes)
 # app = FastAPI(root_path="/api")
 
-
-
-@app.get('/hello', response_model=str)
-def say_hello(name: Annotated[str, Query()] = 'World'):
-    return f"hello {name} !!"
-
-@app.get('/fibo', response_model=int)
-def fibo(n: Annotated[int, Query(ge=0)]):
-    a, b = 0, 1
-    for _ in range(n):
-        a, b = b, a + b
-    return f"fibonacci number at {n} is {a}"
-
-@app.get("/equation", response_model=EquationResponse)
-def equation(dto: Annotated[EquationRequest, Query()]):
-
-    result = {}
-    
-    delta =  dto.b**2 - 4 * dto.a * dto.c
-    result['delta'] = delta
-
-    if delta >= 0:
-        result['sol1'] = (-dto.b - math.sqrt(delta)) / (2 * dto.a)
-        result['sol2'] = (-dto.b + math.sqrt(delta)) / (2 * dto.a)
-    else:
-        result['sol1'] = None
-        result['sol2'] = None
-
-    return result
-
-@app.post("/contact", response_model=str)
-async def contact(dto: Annotated[ContactRequest, Body()], mailer: Annotated[Mailer, Depends(Mailer)]):
-    name = dto.name
-    email = dto.email
-    content = dto.content
-    return "mail sending disabled"
-    # try:
-    #     await mailer.send_email([email], f"{name} sent a message from fast api.", content)
-    #     return f"Mail sent to {email}"
-    # except Exception as error:
-    #     return str(error)
-    
 @app.get("/pokemon/{pokemon_id}", response_model=PokemonResponse)
 async def get_pokemon_full_info(pokemon_id: int, 
                                 pokemon_service: Annotated[PokemonService, Depends(PokemonService)],
