@@ -53,16 +53,18 @@ async def contact(dto: Annotated[ContactRequest, Body()], mailer: Annotated[Mail
     #     return str(error)
     
 @app.get("/pokemon/{pokemon_id}", response_model=PokemonResponse)
-def get_pokemon_full_info(pokemon_id: int, pokemon_service: Annotated[PokemonService, Depends(PokemonService)]):    
-    result = {}
+async def get_pokemon_full_info(pokemon_id: int, pokemon_service: Annotated[PokemonService, Depends(PokemonService)]):    
+    result = {}    
+    pokemon_json = await pokemon_service.get_pokemon(pokemon_id)    
     result["id"] = pokemon_id
-    result["name"] = ""
-    result["height"] = 0.0
-    result["weight"] = 0.0
+    result["name"] = pokemon_json["name"]
+    result["height"] = float(pokemon_json["height"]) / 10
+    result["weight"] = float(pokemon_json["weight"])
+
+    
+
     result["description"] = ""
-
-
-    return pokemon_service.get_pokemon(pokemon_id)
+    return result
 
 
 def main():
