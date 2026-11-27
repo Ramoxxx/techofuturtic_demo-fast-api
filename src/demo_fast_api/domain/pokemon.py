@@ -1,7 +1,7 @@
 from __future__ import annotations
 from demo_fast_api.domain.base import Base
-from sqlalchemy.orm import Mapped, mapped_column
-from sqlalchemy import Enum, ForeignKey, relationship
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy import Enum, ForeignKey
 
 from demo_fast_api.domain.nature import Nature
 

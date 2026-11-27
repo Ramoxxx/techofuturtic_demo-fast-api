@@ -16,6 +16,6 @@ class Dresseur(Base):
     badges: Mapped[int] = mapped_column(default=0)
     actif: Mapped[bool] = mapped_column(default=True)
 
-    # pokemons: Mapped[list[Pokemon]] = relationship(
-    #     secondary=
-    # )
+    pokemons: Mapped[list[Pokemon]] = relationship(
+        secondary='dresseur_pokemon'
+    )

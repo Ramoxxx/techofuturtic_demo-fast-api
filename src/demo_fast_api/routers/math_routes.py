@@ -6,7 +6,7 @@ from fastapi import APIRouter, FastAPI, Query
 from demo_fast_api.dto.request import EquationRequest
 from demo_fast_api.dto.responses import EquationResponse
 
-router = APIRouter(tags=['Default'])
+router = APIRouter(tags=['Math'])
 
 @router.get('/fibo', response_model=int)
 def fibo(n: Annotated[int, Query(ge=0)]):

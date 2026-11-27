@@ -2,8 +2,8 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from decimal import Decimal
-from sqlalchemy.orm import Mapped, mapped_column
-from sqlalchemy import String, DECIMAL, ForeignKey, relationship
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy import String, DECIMAL, ForeignKey
 from demo_fast_api.domain.base import Base
 
 if TYPE_CHECKING:
@@ -21,5 +21,5 @@ class Espece(Base):
     type1_id: Mapped[int] = mapped_column(ForeignKey('type.id'), nullable=False) 
     type2_id: Mapped[int|None] = mapped_column(ForeignKey('type.id'), nullable=True) 
 
-    type1: Mapped[Type] = relationship()
-    type2: Mapped[Type|None] = relationship()
+    type1: Mapped[Type] = relationship(foreign_keys=[type1_id])
+    type2: Mapped[Type|None] = relationship(foreign_keys=[type2_id])

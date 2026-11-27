@@ -1,4 +1,5 @@
-from sqlalchemy import Column, DeclarativeBase, ForeignKey, Table
+from sqlalchemy import Column, ForeignKey, Table
+from sqlalchemy.orm import DeclarativeBase
 
 
 class Base(DeclarativeBase):

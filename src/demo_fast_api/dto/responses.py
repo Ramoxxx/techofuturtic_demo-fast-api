@@ -1,5 +1,9 @@
 from dataclasses import dataclass
 
+from pydantic import BaseModel
+
+from demo_fast_api.domain.type import Type
+
 
 @dataclass
 class EquationResponse:
@@ -14,3 +18,9 @@ class PokemonResponse:
     height: float
     weight: float
     description: str
+
+
+class TypeResponse(BaseModel):
+    id: int
+    nom: str
+    couleur_hex: str
