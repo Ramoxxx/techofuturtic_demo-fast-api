@@ -11,8 +11,11 @@ session_factory = sessionmaker(bind=engine)
 
 def get_session():
     session = session_factory()
-    yield session
     try:
+        yield session
         session.commit()
+    except Exception:
+        session.rollback()
+        raise
     finally:
         session.close()
